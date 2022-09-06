@@ -1,11 +1,13 @@
+import 'dart:math';
+
 import 'package:blog_app_fullstackdev/bloc/login/login_bloc.dart';
 import 'package:blog_app_fullstackdev/helpers/shared_pref.dart';
 import 'package:blog_app_fullstackdev/ui/home_page/home_page.dart';
 import 'package:blog_app_fullstackdev/ui/register_page/register_page.dart';
 import 'package:blog_app_fullstackdev/utils/app_utils.dart';
-import 'package:blog_app_fullstackdev/utils/ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:blog_app_fullstackdev/utils/ext.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,15 +15,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void dispose() {
+    emailTec.dispose();
+    passwordTec.dispose();
+    loginBloc.close();
+    super.dispose();
+  }
+
   var emailTec = TextEditingController(text: "mtk@gmail.com");
   var passwordTec = TextEditingController(text: "password");
 
   var _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  LoginBloc loginBloc;
 
   @override
   Widget build(BuildContext context) {
-    // ignore: close_sinks
-    final LoginBloc loginBloc = BlocProvider.of<LoginBloc>(context);
+    loginBloc = BlocProvider.of<LoginBloc>(context);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -64,7 +74,6 @@ class _LoginPageState extends State<LoginPage> {
               height: 50.0,
               child: RaisedButton(
                 onPressed: () {
-                  // context.next(HomePage());
                   if (emailTec.text.isEmpty || passwordTec.text.isEmpty) {
                     AppUtils.showSnackBar(
                       "Fill Data",
@@ -94,21 +103,28 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text("Register"),
               ),
             ),
-            BlocBuilder<LoginBloc, LoginState>(
-              builder: (context, state) {
+            BlocListener(
+              listener: (context, state) {
                 if (state is LoginLoadedState) {
                   print(state.user.token);
                   SharedPref.setData(
                       key: SharedPref.token, value: state.user.token);
+                  context.next(HomePage());
                 }
-
                 if (state is LoginErrorState) {
                   print(state.error.toString());
+                  AppUtils.showSnackBar(
+                    "Something went wrong.",
+                    ScaffoldMessenger.of(context),
+                  );
                 }
-                return Center(
-                  child: Text("NUll"),
-                );
               },
+              bloc: loginBloc,
+              child: BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  return Center();
+                },
+              ),
             )
           ],
         ),

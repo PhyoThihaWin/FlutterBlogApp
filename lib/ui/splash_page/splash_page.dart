@@ -17,7 +17,7 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(Duration(seconds: 2), () async {
       await SharedPref.getData(key: SharedPref.token).then((token) {
         if (token.toString() != "null" && token.toString() != null) {
-          context.next(HomePage());
+          context.nextRemove(HomePage());
         } else
           context.next(LoginPage());
       });

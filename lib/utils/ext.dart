@@ -5,4 +5,9 @@ extension MyExt on BuildContext {
   void next(T) {
     Navigator.push(this, MaterialPageRoute(builder: (_) => T));
   }
+
+  void nextRemove(T){
+    Navigator.pushAndRemoveUntil(this, MaterialPageRoute(builder: (context) => T,), (route) => false);
+  }
+
 }

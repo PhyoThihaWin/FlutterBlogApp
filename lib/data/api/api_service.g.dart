@@ -37,4 +37,29 @@ class _ApiService implements ApiService {
     final value = User.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<User> getRegister(name, email, password, image) async {
+    ArgumentError.checkNotNull(name, 'name');
+    ArgumentError.checkNotNull(email, 'email');
+    ArgumentError.checkNotNull(password, 'password');
+    ArgumentError.checkNotNull(image, 'image');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'name': name,
+      r'email': email,
+      r'password': password
+    };
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request<Map<String, dynamic>>('register',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = User.fromJson(_result.data);
+    return value;
+  }
 }

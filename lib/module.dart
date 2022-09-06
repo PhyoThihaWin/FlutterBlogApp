@@ -1,6 +1,8 @@
 import 'package:blog_app_fullstackdev/bloc/login/login_bloc.dart';
+import 'package:blog_app_fullstackdev/bloc/register/register_bloc.dart';
 import 'package:blog_app_fullstackdev/data/api/api_service.dart';
 import 'package:blog_app_fullstackdev/data/repository/login_repository.dart';
+import 'package:blog_app_fullstackdev/data/repository/register_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -19,4 +21,11 @@ void locator() {
   // ignore: close_sinks
   LoginBloc loginBloc = LoginBloc(loginRepository: getIt.call());
   getIt.registerLazySingleton(() => loginBloc);
+
+  RegisterRepository registerRepository = RegisterRepository(getIt.call());
+  getIt.registerLazySingleton(() => registerRepository);
+
+  // ignore: close_sinks
+  RegisterBloc registerBloc = RegisterBloc(registerRepository: getIt.call());
+  getIt.registerLazySingleton(() => registerBloc);
 }

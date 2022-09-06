@@ -1,5 +1,8 @@
+import 'package:blog_app_fullstackdev/helpers/shared_pref.dart';
+import 'package:blog_app_fullstackdev/ui/login_page/login_page.dart';
 import 'package:blog_app_fullstackdev/widget/post_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:blog_app_fullstackdev/utils/ext.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -40,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text("mgmg@gmail.com"),
                   SizedBox(height: 24),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: logout,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [Icon(Icons.logout), Text("Logout")],
@@ -66,5 +69,10 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  logout() {
+    SharedPref.clear();
+    context.nextRemove(LoginPage());
   }
 }

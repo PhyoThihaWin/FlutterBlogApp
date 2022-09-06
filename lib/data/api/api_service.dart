@@ -18,4 +18,11 @@ abstract class ApiService {
   @POST("login")
   Future<User> getLogin(
       @Query("email") String email, @Query("password") String password);
+
+  @POST("register")
+  Future<User> getRegister(
+      @Query("name") String name,
+      @Query("email") String email,
+      @Query("password") String password,
+      Future<MultipartFile> image);
 }
